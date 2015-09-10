@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -16,7 +18,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public List<String> grocreyItems = new ArrayList<String>();
+    private Button saveButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,16 +28,21 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.listview);
 
-        String[] groceries = new String[] { "tea", "coffee" };
-
         final ArrayList<String> grocreyList = new ArrayList<String>();
 
-        for (int i = 0; i < groceries.length; ++i){
-            grocreyList.add(groceries[i]);
-        }
+        saveButton = (Button) findViewById(R.id.button);
 
-        ArrayAdapter<String> itemsAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, grocreyList);
+        final ArrayAdapter<String> itemsAdapter =
+                new ArrayAdapter<String>(this, R.layout.add_item, grocreyList);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText sampleView = (EditText)findViewById(R.id.editText);
+                String enteredGrocery = sampleView.getText().toString();
+                grocreyList.add(enteredGrocery);
+                itemsAdapter.notifyDataSetChanged();
+            }
+        });
 
         listView.setAdapter(itemsAdapter);
     }
