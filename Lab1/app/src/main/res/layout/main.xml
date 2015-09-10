@@ -14,7 +14,7 @@
         android:id='@+id/list'
 
         />
-
+<!--
 
     <Button
         android:layout_width=""
@@ -28,5 +28,7 @@
         android:layout_height="match_parent"
         android:id='@+id/input'
         />
+
+    -->
 
 </RelativeLayout>
