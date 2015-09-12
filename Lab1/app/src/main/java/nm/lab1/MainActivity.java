@@ -1,14 +1,18 @@
 package nm.lab1;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,6 +24,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //define parts of interface
         Button button = (Button) findViewById(R.id.button);
         final EditText textbox = (EditText) findViewById(R.id.editText);
         ListView list = (ListView) findViewById(R.id.list);
@@ -27,8 +32,10 @@ public class MainActivity extends ActionBarActivity {
         final ArrayList<String> arrayList = new ArrayList<String>();
         final ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, arrayList);
+
         list.setAdapter(listAdapter);
 
+        //click button listener
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,6 +46,44 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
+        setupListViewListener(list, arrayList, listAdapter);
+    }
+
+    private void setupListViewListener(ListView list, final ArrayList<String> arrayList, final ArrayAdapter<String> listAdapter){
+    //long click listener
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                //remove item in listarray at position
+                doAlertDialog(arrayList, position, listAdapter); //brings up alert dialog
+
+                return true;
+            }
+        });
+    }
+
+    private void doAlertDialog(final ArrayList<String> arrayList, final int position, final ArrayAdapter<String> listAdapter){
+        //alert dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Delete this item?");
+
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //do delete item. for now, placeholder toast
+                Toast.makeText(MainActivity.this, "Item removed", Toast.LENGTH_LONG).show();
+                arrayList.remove(position); //remove choice
+                listAdapter.notifyDataSetChanged();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog2, int which2) {
+                //do nothing
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
 
