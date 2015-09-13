@@ -56,10 +56,42 @@ public class MainActivity extends ActionBarActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 //remove item in listarray at position
                 doAlertDialog(arrayList, position, listAdapter); //brings up alert dialog
-
                 return true;
             }
         });
+    //short click listener
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //arrayList.set(position, "INPUT");
+                doInputAlertDialog(arrayList, position, listAdapter);
+            }
+        });
+    }
+
+
+    private void doInputAlertDialog(final ArrayList<String> arrayList, final int position, final ArrayAdapter<String> listAdapter) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Edit item: ");
+        final EditText input = new EditText(this);
+        alertDialogBuilder.setView(input);
+
+        //alert buttons
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String text = input.getText().toString();
+                arrayList.set(position, text);
+                listAdapter.notifyDataSetChanged();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialogBuilder.show();
     }
 
     private void doAlertDialog(final ArrayList<String> arrayList, final int position, final ArrayAdapter<String> listAdapter){
@@ -67,6 +99,7 @@ public class MainActivity extends ActionBarActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Delete this item?");
 
+        //alert buttons
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
