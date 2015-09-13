@@ -4,4 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="button_text">Add new item</string>
+    <string name="dialog_title">New Item</string>
+    <string name="dialog_confirm">Add Item</string>
+    <string name="dialog_deny">Cancel</string>
 </resources>
