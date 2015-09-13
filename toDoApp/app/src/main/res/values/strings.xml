@@ -12,4 +12,5 @@
 
     <string name="addHeader">Create Your Task</string>
     <string name="editHeader">Edit your note</string>
+    <string name="add">Add Task</string>
 </resources>
