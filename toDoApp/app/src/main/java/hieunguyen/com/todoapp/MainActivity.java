@@ -16,38 +16,83 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<String> items = new ArrayList<>();
-    ArrayAdapter<String> itemsAdapter;
+    ArrayList<ToDoItem> items = new ArrayList<>();
+    MyAdapter itemsAdapter;
     ListView listView;
 
-    public AlertDialog createEditDialog(String message, int positiveButton, int negativeButton, final int position) {
+    /*
+     * Creates dialog for editing a task
+     */
+    public AlertDialog createEditDialog(final int position) {
+        String currentItem = itemsAdapter.getList().get(position).getText();
+
         AlertDialog.Builder editDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
         final EditText editText = new EditText(MainActivity.this);
-        String currentItem = items.get(position);
         editText.setText(currentItem);
         editText.setSelection(currentItem.length());
-        editDialogBuilder.setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
 
+        editDialogBuilder.setPositiveButton(R.string.confirmEdit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                items.set(position, editText.getText().toString());
-                Log.d("Changed", items.toString());
+                itemsAdapter.getList().get(position).setText(editText.getText().toString());
                 itemsAdapter.notifyDataSetChanged();
             }
-
-        }).setNegativeButton(negativeButton, new DialogInterface.OnClickListener() {
-
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.d("Cancel", "cancel");
+                return;
             }
+        }).setMessage(R.string.editHeader).setView(editText);
 
-        }).setMessage(message).setView(editText);
         return editDialogBuilder.create();
+    }
+
+    /*
+     * Creates dialog for deleting a task
+     */
+    public AlertDialog createDeleteDialog(final int position) {
+        AlertDialog.Builder deleteDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        deleteDialogBuilder.setPositiveButton(R.string.confirmDelete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                itemsAdapter.getList().remove(position);
+                itemsAdapter.notifyDataSetChanged();
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).setMessage("Delete \"" + itemsAdapter.getList().get(position).getText() + "\"?");
+        return deleteDialogBuilder.create();
+    }
+
+    /*
+     * Creates dialog for adding a task
+     */
+    public AlertDialog createAddDialog() {
+        final EditText editText = new EditText(MainActivity.this);
+
+        AlertDialog.Builder addDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        addDialogBuilder.setPositiveButton(R.string.confirmAdd, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                itemsAdapter.getList().add(new ToDoItem(editText.getText().toString(), false));
+                itemsAdapter.notifyDataSetChanged();
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        }).setMessage(R.string.addHeader).setView(editText);
+
+        return addDialogBuilder.create();
     }
 
     @Override
@@ -55,19 +100,61 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        items.add("Buy apples");
-        items.add("Yell at cashier");
+        // Setting the header
+        items.add(new ToDoItem("To Do", true));
 
-        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        // Adding items beforehand
+        items.add(new ToDoItem("Buy apples", false));
+        items.add(new ToDoItem("Buy chips", false));
+        items.add(new ToDoItem("Buy beer", false));
+        items.add(new ToDoItem("Party hard", false));
+
+        itemsAdapter = new MyAdapter(this, items);
 
         listView = (ListView) findViewById(R.id.lvItems);
         listView.setAdapter(itemsAdapter);
 
+        // On tap, allow user to edit task
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("item", itemsAdapter.getItem(position));
-                createEditDialog("Edit your note", R.string.confirmEdit, R.string.cancelEdit, position).show();
+                if (!itemsAdapter.getList().get(position).getIsHeader()) {
+                    createEditDialog(position).show();
+                }
+            }
+        });
+
+        // On long hold, allow user to delete task
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                createDeleteDialog(position).show();
+                return true;
+            }
+        });
+
+        Button clearCompleted = (Button) findViewById(R.id.clearCompleted);
+        Button addTask = (Button) findViewById(R.id.addNew);
+
+        // Remove checkboxed (completed) tasks
+        clearCompleted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (Iterator<ToDoItem> iterator = itemsAdapter.getList().iterator(); iterator.hasNext();) {
+                    ToDoItem item = iterator.next();
+                    if (item.getCompleted()) {
+                        iterator.remove();
+                    }
+                }
+                itemsAdapter.notifyDataSetChanged();
+            }
+        });
+
+        // On tap, allow user to add task
+        addTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAddDialog().show();
             }
         });
 
