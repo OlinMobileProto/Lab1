@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +21,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private Button saveButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +38,45 @@ public class MainActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText sampleView = (EditText)findViewById(R.id.editText);
+                EditText sampleView = (EditText) findViewById(R.id.editText);
                 String enteredGrocery = sampleView.getText().toString();
                 grocreyList.add(enteredGrocery);
                 itemsAdapter.notifyDataSetChanged();
             }
         });
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, final int p, long id) {
+                final EditText editText = new EditText(getApplicationContext());
+                editText.setText(grocreyList.get(p).toString());
+                editText.setTextColor(0xff000000);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+                alertDialogBuilder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        grocreyList.remove(p);
+                        grocreyList.add(p, editText.getText().toString());
+                        itemsAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        grocreyList.remove(p);
+                        itemsAdapter.notifyDataSetChanged();
+                    }
+                });
+                alertDialogBuilder.setView(editText);
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
         listView.setAdapter(itemsAdapter);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
