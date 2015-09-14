@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Grocery List</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">GroceryList</string>
     <string name="action_settings">Settings</string>
     <string name="button_text">Add new item</string>
-    <string name="dialog_title">New Item</string>
-    <string name="dialog_confirm">Add Item</string>
-    <string name="dialog_deny">Cancel</string>
+    <string name="new_item_dialog_title">New Item</string>
+    <string name="edit_item_dialog_title">Edit Item</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_delete">Delete Item</string>
 </resources>
