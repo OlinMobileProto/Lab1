@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Grocery List</string>
+    <string name="edit_list_item">Edit Activity</string>
+
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="alert_message">What do you want to do?</string>
+
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
