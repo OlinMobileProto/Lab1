@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class MainActivityFragment extends ListFragment {
 
-    private ArrayAdapter<String> adapter;
+    private GroceryAdapter adapter;
     private ArrayList<String> items;
 
     public MainActivityFragment() {
@@ -30,8 +30,7 @@ public class MainActivityFragment extends ListFragment {
         items = new ArrayList<String>();
         items.add("Cheese");
         items.add("Animal Crackers");
-        adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, items);
+        adapter = new GroceryAdapter(getActivity(), items);
         setListAdapter(adapter);
     }
 
