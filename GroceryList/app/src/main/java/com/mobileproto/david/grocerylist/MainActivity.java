@@ -1,17 +1,14 @@
 package com.mobileproto.david.grocerylist;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -21,8 +18,19 @@ public class MainActivity extends AppCompatActivity
 {
     static final String STATE_LIST_KEY = "list";
     private static String logTag = "GroceryList";  // For debugging using Log.d(). Currently unused
+
     private ArrayList<String> groceryItems;
     private ArrayAdapter<String> itemsAdapter;
+
+    public ArrayAdapter<String> getItemsAdapter()
+    {
+        return itemsAdapter;
+    }
+
+    public ArrayList<String> getGroceryItems()
+    {
+        return groceryItems;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,18 +52,12 @@ public class MainActivity extends AppCompatActivity
         ListView listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(itemsAdapter);
 
-        // If the user long-clicks a list item, open up the edit dialog.
+        // Add the long click listener to the listview
         listView.setOnItemLongClickListener(this);
 
+        // Add the click listener to the button
         Button newItemButton = (Button) findViewById(R.id.button_new_item);
-        newItemButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                promptNewItem();
-            }
-        });
+        newItemButton.setOnClickListener(this);
     }
 
     @Override
@@ -91,68 +93,61 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    /**
+     * Opens a dialog that allows the user to enter a new grocery item. The Builder object will add
+     * the new item to the ArrayList and update the ArrayAdapter.
+     */
     private void promptNewItem()
     {
         AlertDialog.Builder builder = new NewItemBuilder(this);
         builder.show();
     }
 
-    private void editItem(final int position)
+    /**
+     * Edits the nth value in the List by creating a dialog that allows the user to edit the text
+     * or delete the value. The Builder will update the ArrayList and ArrayAdapter.
+     */
+    private void editItem(final int n)
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.edit_item_dialog_title);
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setText(groceryItems.get(position));
-        builder.setView(input);
-
-        builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                String text = input.getText().toString();
-                groceryItems.set(position, text);
-                itemsAdapter.notifyDataSetChanged();
-            }
-        });
-        builder.setNeutralButton(R.string.dialog_cancel, new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                dialog.cancel();
-            }
-        });
-        builder.setNegativeButton(R.string.dialog_delete, new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                groceryItems.remove(position);
-                itemsAdapter.notifyDataSetChanged();
-            }
-        });
+        AlertDialog.Builder builder = new EditItemBuilder(this, n);
         builder.show();
     }
 
+    /**
+     * Adds a string to the groceryItems ArrayList and updates the ArrayAdapter
+     */
     public void addItem(String item)
     {
         groceryItems.add(item);
         itemsAdapter.notifyDataSetChanged();
     }
 
+
+    /**
+     * Currently, there is only one element that has a long click listener: The ListView. If we long
+     * click on the list view, then allow the user to edit the item they clicked on.
+     *
+     * Note: If you add other elements with a long click listener, then you will have to check the
+     * origin of the click using a switch or if-else chain.
+     */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
     {
+        // If the user long-clicks a list item, open up the edit dialog.
         editItem(position);
         return true;
     }
 
+    /**
+     * Currently, there is only one element that has a click listener: The new item button. If we
+     * click on it, allow the user to add a new element.
+     *
+     * Note: If you add other elements with a lick listener, then you will have to check the
+     * origin of the click using a switch or if-else chain.
+     */
     @Override
     public void onClick(View v)
     {
-
+        promptNewItem();
     }
 }
