@@ -94,27 +94,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void AlertDialog_edit(String entry, int position) {
-        AlertDialog.Builder addtaskalert = new AlertDialog.Builder(this);
-        addtaskalert.setTitle("Edit this task");
-        addtaskalert.setMessage("Need to do:");
-        final EditText textinput = new EditText(this);
-        addtaskalert.setView(textinput);
-        DialogInterface.OnClickListener Addbuttonlistener = new DialogInterface.OnClickListener(){
-
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i){
-                String task = textinput.getText().toString();
-                Log.d("MainActivity", task);
-                arraylist.add(task);
-                ArrayAdapter<String> todolist_db = (ArrayAdapter<String>) listView.getAdapter();
-                todolist_db.notifyDataSetChanged();
-            }
-        };
-        addtaskalert.setPositiveButton("Add", Addbuttonlistener);
-        addtaskalert.setNegativeButton("Cancel", null);
-        addtaskalert.create().show();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
