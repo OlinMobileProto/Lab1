@@ -17,10 +17,11 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
+        implements AdapterView.OnItemLongClickListener, View.OnClickListener
 {
     static final String STATE_LIST_KEY = "list";
-    private static String logTag = "GroceryList";
-    private ArrayList<String> strings;
+    private static String logTag = "GroceryList";  // For debugging using Log.d(). Currently unused
+    private ArrayList<String> groceryItems;
     private ArrayAdapter<String> itemsAdapter;
 
     @Override
@@ -29,28 +30,22 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // If there is a savedInstanceState, load the groceryItems from the previous state.
         if (savedInstanceState != null)
-        {
-            this.strings = savedInstanceState.getStringArrayList(STATE_LIST_KEY);
-        } else
-        {
-            this.strings = new ArrayList<>();
-        }
+            this.groceryItems = savedInstanceState.getStringArrayList(STATE_LIST_KEY);
+        // Otherwise, initialize the list.
+        else
+            this.groceryItems = new ArrayList<>();
 
-        this.itemsAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, strings);
+        // assign the groceryList to the itemsAdapter, and then assign the itemsAdapter to the list
+        // view.
+        itemsAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, groceryItems);
         ListView listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(itemsAdapter);
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                editItem(position);
-                return true;
-            }
-        });
+        // If the user long-clicks a list item, open up the edit dialog.
+        listView.setOnItemLongClickListener(this);
 
         Button newItemButton = (Button) findViewById(R.id.button_new_item);
         newItemButton.setOnClickListener(new View.OnClickListener()
@@ -90,7 +85,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the current grocery list
-        savedInstanceState.putStringArrayList(STATE_LIST_KEY, strings);
+        savedInstanceState.putStringArrayList(STATE_LIST_KEY, groceryItems);
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -98,30 +93,7 @@ public class MainActivity extends AppCompatActivity
 
     private void promptNewItem()
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.new_item_dialog_title);
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                String text = input.getText().toString();
-                addItem(text);
-            }
-        });
-        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                dialog.cancel();
-            }
-        });
+        AlertDialog.Builder builder = new NewItemBuilder(this);
         builder.show();
     }
 
@@ -132,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setText(strings.get(position));
+        input.setText(groceryItems.get(position));
         builder.setView(input);
 
         builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener()
@@ -141,7 +113,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which)
             {
                 String text = input.getText().toString();
-                strings.set(position, text);
+                groceryItems.set(position, text);
                 itemsAdapter.notifyDataSetChanged();
             }
         });
@@ -158,17 +130,29 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                strings.remove(position);
+                groceryItems.remove(position);
                 itemsAdapter.notifyDataSetChanged();
             }
         });
         builder.show();
     }
 
-    private void addItem(String item)
+    public void addItem(String item)
     {
-        strings.add(item);
+        groceryItems.add(item);
         itemsAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+    {
+        editItem(position);
+        return true;
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+
+    }
 }
