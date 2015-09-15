@@ -2,7 +2,11 @@
     <string name="app_name">GroceryList</string>
 
     <string name="hello_world">Item One!</string>
-    <string name="newitem">Add a new note!</string>
+    <string name="newitem"> Add a new note!</string>
+    <string name="firstItem">Example Note</string>
+    <string name="editTitle">Edit Note</string>
+    <string name="posBtn">Change</string>
+    <string name="negBtn">Cancel</string>
     <string name="add">Create</string>
     <string name="action_settings">Settings</string>
 </resources>
