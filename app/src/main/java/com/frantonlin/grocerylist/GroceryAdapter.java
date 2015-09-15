@@ -16,6 +16,11 @@ import java.util.ArrayList;
 public class GroceryAdapter extends ArrayAdapter<GroceryItem> {
     private ArrayList<GroceryItem> items;
 
+    /**
+     * Constructor
+     * @param context the context of the ArrayAdapter
+     * @param items the items handled by the ArrayAdapter
+     */
     public GroceryAdapter(Context context, ArrayList<GroceryItem> items) {
         super(context, 0, items);
         this.items = items;
@@ -23,7 +28,7 @@ public class GroceryAdapter extends ArrayAdapter<GroceryItem> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
+        // Get the information for this position
         String itemName = getItem(position).getName();
         Boolean checked = getItem(position).getChecked();
 
@@ -32,12 +37,12 @@ public class GroceryAdapter extends ArrayAdapter<GroceryItem> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.grocery_item, parent, false);
         }
 
-        // Lookup view for data population
+        // Look up view for information population
         ImageView checkbox = (ImageView) convertView.findViewById(R.id.checkbox);
         TextView list_item = (TextView) convertView.findViewById(R.id.list_item);
         ImageView delete_icon = (ImageView) convertView.findViewById(R.id.delete_icon);
 
-        // Populate the data into the template view using the data object
+        // Populate the information into the views
         if(checked)
             checkbox.setImageResource(R.drawable.ic_check_box_black_24dp);
         else

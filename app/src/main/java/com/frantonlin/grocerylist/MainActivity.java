@@ -35,9 +35,11 @@ public class MainActivity extends AppCompatActivity {
         /// Handle presses on the action bar items
         switch (id) {
             case R.id.action_add:
+                // Add button pressed, create and show add item popup
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(R.string.add_new_item);
                 final EditText editText = new EditText(MainActivity.this);
+
                 builder.setView(editText)
                         .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                                 // cancel
                             }
                         });
+
+                // Create and show the popup, also displaying the keyboard
                 AlertDialog alertDialog = builder.create();
                 alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                 alertDialog.show();

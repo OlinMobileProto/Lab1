@@ -17,7 +17,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
- * A placeholder fragment containing a simple view.
+ * The main activity list fragment
  */
 public class MainActivityFragment extends ListFragment {
 
@@ -31,6 +31,8 @@ public class MainActivityFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // Initialize list with a couple items
         items = new ArrayList<>();
         items.add(new GroceryItem("Cheese"));
         items.add(new GroceryItem("Animal Crackers"));
@@ -40,11 +42,16 @@ public class MainActivityFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, final int position, long id) {
+        // Item clicked, create and show edit item popup
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.edit_item);
+
+        // Initialize text entry with existing item, moving cursor to the end
         final EditText editText = new EditText(getActivity());
         editText.setText(items.get(position).getName());
         editText.setSelection(editText.getText().length());
+
+        // Set save/cancel buttons
         builder.setView(editText)
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -57,15 +64,26 @@ public class MainActivityFragment extends ListFragment {
                         // cancel
                     }
                 });
+
+        // Create and show the popup, also displaying the keyboard
         AlertDialog alertDialog = builder.create();
         alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         alertDialog.show();
     }
 
+    /**
+     * Add item method
+     * @param newItemName the name of the new item
+     */
     public void addItem(String newItemName) {
         adapter.add(new GroceryItem(newItemName));
     }
 
+    /**
+     * Edit item method
+     * @param editedItemName the new name of the edited item
+     * @param pos the position of the edited item
+     */
     public void editItem(String editedItemName, int pos) {
         items.get(pos).setName(editedItemName);
         adapter.notifyDataSetChanged();
