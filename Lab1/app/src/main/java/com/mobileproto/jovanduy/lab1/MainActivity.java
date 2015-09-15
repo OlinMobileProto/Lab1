@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<Item> items;
     public ListView listView;
     public Button addButton;
+    public Button deleteButton;
 
     /**
      * Returns AlertDialog used for editing items
@@ -131,6 +132,36 @@ public class MainActivity extends AppCompatActivity {
         return addBuilder.create();
     }
 
+    public AlertDialog openDoneDeleter() {
+        // build the AlertDialog
+        AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(this);
+        deleteBuilder.setTitle("Delete done items?");
+
+        // delete item when positive button is clicked
+        deleteBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                for (int i=items.size()-1; i >= 0; i--) {
+                    if (items.get(i).getStatus()) {
+                        items.remove(i);
+                    }
+                }
+                itemsAdapter.notifyDataSetChanged();
+            }
+        });
+
+        // do nothing when negative button is clicked
+        deleteBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        });
+
+        return deleteBuilder.create();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +195,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openAdder().show();
+            }
+        });
+
+        // button for deleting done items
+        deleteButton = (Button) findViewById(R.id.deleteButton);
+        // open AlertDialog to delete done items when button is clicked
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDoneDeleter().show();
             }
         });
 

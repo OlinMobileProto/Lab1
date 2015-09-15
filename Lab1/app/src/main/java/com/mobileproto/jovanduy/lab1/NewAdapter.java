@@ -15,7 +15,6 @@ import java.util.ArrayList;
  */
 public class NewAdapter extends ArrayAdapter<Item> {
 
-
     public NewAdapter(Context context, ArrayList<Item> items) {
         super(context, 0, items);
     }
@@ -34,6 +33,7 @@ public class NewAdapter extends ArrayAdapter<Item> {
         tvText.setText(item.text);
 
         final CheckBox checkbox = (CheckBox) convertView.findViewById(R.id.checkbox);
+        checkbox.setChecked(item.getStatus());
         checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,5 +1,7 @@
 package com.mobileproto.jovanduy.lab1;
 
+import android.widget.CheckBox;
+
 /**
  * Created by Jordan on 9/14/15.
  */
