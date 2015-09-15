@@ -7,7 +7,15 @@
         android:id="@+id/tvText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/checkbox"
         android:layout_centerVertical="true"
+        />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkbox"
+        android:focusable="false"
         />
 
 </RelativeLayout>

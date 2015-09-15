@@ -33,6 +33,13 @@ public class NewAdapter extends ArrayAdapter<Item> {
         // Populate the data into the template view using the data object
         tvText.setText(item.text);
 
+        final CheckBox checkbox = (CheckBox) convertView.findViewById(R.id.checkbox);
+        checkbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                item.changeStatus(checkbox.isChecked());
+            }
+        });
         // Return completed view to render on screen
         return convertView;
     }
