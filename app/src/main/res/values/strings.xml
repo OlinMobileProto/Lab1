@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="inputText">Input your text here</string>
+    <string name="eggs">add more eggs</string>
+    <string name="newitem">New Item</string>
+    <string name="add">add</string>
 </resources>
