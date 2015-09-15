@@ -13,6 +13,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+/**
+ * This class is the main activity for our app.
+ */
 public class MainActivity extends AppCompatActivity
         implements AdapterView.OnItemLongClickListener, View.OnClickListener
 {
