@@ -70,17 +70,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*
-     * Updates the "X To Do" header
+    /**
+     * Updates the header that says "X To Do"
      */
     public void updateListHeader() {
         TextView header = (TextView) findViewById(R.id.header);
-        String count = itemsAdapter.getCount() == 0 ? "Nothing" : String.valueOf(itemsAdapter.getCount());
+        String count = itemsAdapter.getCount() == 0 ? "Nice! Nothing" : String.valueOf(itemsAdapter.getCount());
         header.setText(count + " To Do");
     }
 
-    /*
-     * Creates dialog for editing a task
+    /**
+     * Creates a pop-up to allow user to edit the note
+     * @param position position of note being edited in the ArrayAdapter
+     * @return AlertDialog.Builder object
      */
     public AlertDialog createEditDialog(final int position) {
         String currentItem = itemsAdapter.getList().get(position).getText();
@@ -109,8 +111,10 @@ public class MainActivity extends AppCompatActivity {
         return editDialogBuilder.create();
     }
 
-    /*
-     * Creates dialog for deleting a task
+    /**
+     * Creates a pop-up to allow user to delete the note
+     * @param position position of note being deleted in the ArrayAdapter
+     * @return AlertDialog.Builder object
      */
     public AlertDialog createDeleteDialog(final int position) {
         AlertDialog.Builder deleteDialogBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -129,8 +133,9 @@ public class MainActivity extends AppCompatActivity {
         return deleteDialogBuilder.create();
     }
 
-    /*
-     * Creates dialog for adding a task
+    /**
+     * Creates a pop-up to allow user to add a note
+     * @return AlertDialog.Builder object
      */
     public AlertDialog createAddDialog() {
         final EditText editText = new EditText(MainActivity.this);

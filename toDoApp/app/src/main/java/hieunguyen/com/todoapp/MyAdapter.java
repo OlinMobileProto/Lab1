@@ -1,7 +1,6 @@
 package hieunguyen.com.todoapp;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,12 @@ import java.util.ArrayList;
  */
 public class MyAdapter extends ArrayAdapter<ToDoItem> {
 
-    private final Context context;
     private ArrayList<ToDoItem> itemList;
     private MainService dbService;
     private LayoutInflater myInflater = null;
 
     public MyAdapter(Context context, MainService service) {
         super(context, R.layout.target_item, service.getDataFromDB());
-        this.context = context;
         this.itemList = service.getDataFromDB();
         this.dbService = service;
         this.myInflater = (LayoutInflater) context
@@ -58,8 +55,6 @@ public class MyAdapter extends ArrayAdapter<ToDoItem> {
         viewHolder.checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Log.d("completeUpdate", task.getText() + ": "
-//                        + String.valueOf(viewHolder.checkbox.isChecked()));
                 task.setCompleted(viewHolder.checkbox.isChecked());
                 dbService.edit(task);
             }
@@ -73,10 +68,13 @@ public class MyAdapter extends ArrayAdapter<ToDoItem> {
         return itemList;
     }
 
+    /**
+     * References a new list for the ArrayAdapter and then updates the view
+     * @param newList new data
+     */
     public void setList(ArrayList<ToDoItem> newList) {
         this.itemList = newList;
         this.notifyDataSetChanged();
-        //Log.d("newList", this.itemList.toString());
     }
 
 }

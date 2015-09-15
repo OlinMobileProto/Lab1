@@ -22,26 +22,29 @@ public class MainService {
         taskDB = new MyDatabase(context);
     }
 
+    /**
+     * Adds a Database entry
+     * @param task the entry to be added
+     */
     public void addToDB(ToDoItem task) {
-        //Log.d("save", "saving data");
         db = taskDB.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(MyDatabase.colTaskDesc, task.getText());
         values.put(MyDatabase.colTaskDone, task.getCompleted());
         try {
             db.insertOrThrow(MyDatabase.tableName, MyDatabase.colTaskDesc, values);
-            //Log.d("entry", task.toString());
         } catch (SQLException e) {
-            //Log.d("caught", "got it");
-        } catch (Exception e) {
-            // In case we missed it
+            // Whatever
         } finally {
             db.close();
         }
     }
 
+    /**
+     * Retrieves all data from Database
+     * @return ArrayList of DTOs created from query
+     */
     public ArrayList<ToDoItem> getDataFromDB() {
-        //Log.d("get", "getting data");
         db = taskDB.getReadableDatabase();
         ArrayList<ToDoItem> taskList = new ArrayList<>();
 
@@ -52,7 +55,6 @@ public class MainService {
             int result_id = c.getInt(0);
             String result_desc = c.getString(1);
             Boolean result_done = c.getInt(2) > 0;
-            //Log.d("entry", String.valueOf(result_id) + ", " + result_desc + ", " + String.valueOf(result_done) );
             ToDoItem task = new ToDoItem(result_desc);
             task.setId(result_id);
             task.setCompleted(result_done);
@@ -65,6 +67,10 @@ public class MainService {
         return taskList;
     }
 
+    /**
+     * Edits a Database entry
+     * @param task the entry to be updated
+     */
     public void edit(ToDoItem task) {
         db = taskDB.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -76,6 +82,10 @@ public class MainService {
         db.close();
     }
 
+    /**
+     * Deletes a Database entry
+     * @param task the entry to be deleted
+     */
     public void delete(ToDoItem task) {
         db = taskDB.getWritableDatabase();
         String selection = MyDatabase.colID + " = ?";
@@ -84,8 +94,10 @@ public class MainService {
         db.close();
     }
 
+    /**
+     * Clears all entries whose "Task_Done" field is "1"
+     */
     public void clearCompleted() {
-        //Log.d("clear", "clearCompleted called");
         db = taskDB.getWritableDatabase();
         String selection = MyDatabase.colTaskDone + " = ?";
         String[] selectionArgs = { (String.valueOf(1)) };
