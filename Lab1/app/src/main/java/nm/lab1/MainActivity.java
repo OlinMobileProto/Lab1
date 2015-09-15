@@ -69,7 +69,7 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-
+    //alert dialog for editing
     private void doInputAlertDialog(final ArrayList<String> arrayList, final int position, final ArrayAdapter<String> listAdapter) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Edit item: ");
@@ -93,7 +93,8 @@ public class MainActivity extends ActionBarActivity {
         });
         alertDialogBuilder.show();
     }
-
+    
+    //alert dialog for deleting item
     private void doAlertDialog(final ArrayList<String> arrayList, final int position, final ArrayAdapter<String> listAdapter){
         //alert dialog
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -103,7 +104,6 @@ public class MainActivity extends ActionBarActivity {
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //do delete item. for now, placeholder toast
                 Toast.makeText(MainActivity.this, "Item removed", Toast.LENGTH_LONG).show();
                 arrayList.remove(position); //remove choice
                 listAdapter.notifyDataSetChanged();
