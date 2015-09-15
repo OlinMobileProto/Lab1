@@ -1,12 +1,11 @@
 package hieunguyen.com.todoapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -17,49 +16,56 @@ public class MyAdapter extends ArrayAdapter<ToDoItem> {
 
     private final Context context;
     private ArrayList<ToDoItem> itemList;
+    private MainService dbService;
+    private LayoutInflater myInflater = null;
 
-    public MyAdapter(Context context, ArrayList<ToDoItem> itemList) {
-        super(context, R.layout.target_item, itemList);
+    public MyAdapter(Context context, MainService service) {
+        super(context, R.layout.target_item, service.getDataFromDB());
         this.context = context;
-        this.itemList = itemList;
+        this.itemList = service.getDataFromDB();
+        this.dbService = service;
+        this.myInflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    @Override
+    public int getCount() {
+        return itemList.size();
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        View v = convertView;
+        final ListViewHolder viewHolder;
 
-        // 1. Create inflater
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        // 2. Get rowView from inflater
-        View rowView;
-        if (!itemList.get(position).getIsHeader()) {
-            rowView = inflater.inflate(R.layout.target_item, parent, false);
-
-            // 3. Get and set content/functionality for text and checkbox
-            TextView text = (TextView) rowView.findViewById(R.id.toDoItem);
-            text.setText(itemList.get(position).getText());
-
-            final CheckBox checkbox = (CheckBox) rowView.findViewById(R.id.checkbox);
-            checkbox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (checkbox.isChecked()) {
-                        itemList.get(position).setCompleted(true);
-                    } else {
-                        itemList.get(position).setCompleted(false);
-                    }
-                }
-            });
-
+        if (v == null) {
+            // If convertView is null, then the view is new and it is inflated and held by a new
+            // viewHolder
+            v = myInflater.inflate(R.layout.target_item, null);
+            viewHolder = new ListViewHolder(v);
+            v.setTag(viewHolder);
         } else {
-            rowView = inflater.inflate(R.layout.group_header_item, parent, false);
-            TextView title = (TextView) rowView.findViewById(R.id.header);
-            String count = (itemList.size() == 1 ? "Nothing" : String.valueOf(itemList.size() - 1));
-            title.setText(count + ' ' + itemList.get(position).getText());
+            // Else just retrieve the view-holder
+            viewHolder = (ListViewHolder) v.getTag();
         }
 
-        return rowView;
+        final ToDoItem task = itemList.get(position);
+
+        // Setting attributes of the elements of the view
+        viewHolder.taskText.setText(task.getText());
+
+        viewHolder.checkbox.setChecked(task.getCompleted());
+        viewHolder.checkbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Log.d("completeUpdate", task.getText() + ": "
+//                        + String.valueOf(viewHolder.checkbox.isChecked()));
+                task.setCompleted(viewHolder.checkbox.isChecked());
+                dbService.edit(task);
+            }
+        });
+
+        return v;
 
     }
 
@@ -67,8 +73,10 @@ public class MyAdapter extends ArrayAdapter<ToDoItem> {
         return itemList;
     }
 
-    public void setList(ArrayList<ToDoItem> items) {
-        this.itemList = items;
+    public void setList(ArrayList<ToDoItem> newList) {
+        this.itemList = newList;
+        this.notifyDataSetChanged();
+        //Log.d("newList", this.itemList.toString());
     }
 
 }

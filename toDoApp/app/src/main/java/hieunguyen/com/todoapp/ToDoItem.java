@@ -2,25 +2,17 @@ package hieunguyen.com.todoapp;
 
 /**
  * Created by hieunguyen on 9/12/15.
+ * Data Transfer Object to hold the data retrieved from the database and allow Java to display it.
  */
 public class ToDoItem {
 
+    private int id;
     private String text;
     private Boolean completed;
-    private Boolean isHeader;
 
-    public ToDoItem(String text, Boolean isHeader) {
+    public ToDoItem(String text) {
         this.text = text;
-        this.isHeader = isHeader;
         this.completed = false;
-    }
-
-    public Boolean getIsHeader() {
-        return isHeader;
-    }
-
-    public void setIsHeader(Boolean isHeader) {
-        this.isHeader = isHeader;
     }
 
     public String getText() {
@@ -39,12 +31,19 @@ public class ToDoItem {
         this.completed = completed;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return '[' +
                 "text='" + text + '\'' +
                 ", completed=" + completed +
-                ", isHeader=" + isHeader +
                 ']';
     }
 }
