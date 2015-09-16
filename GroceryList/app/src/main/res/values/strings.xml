@@ -17,4 +17,8 @@
     <string name="editing">Editing</string>
     <string name="ok">OK</string>
     <string name="edited">edited</string>
+    <string name="delete_all">Delete all entries</string>
+    <string name="are_you_sure">Are you sure you want to clear all entries?</string>
+    <string name="yes">Yes</string>
+    <string name="cleared">list cleared</string>
 </resources>

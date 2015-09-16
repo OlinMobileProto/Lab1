@@ -1,10 +1,12 @@
 package com.mtruehle.grocerylist;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +39,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_all:
+                AlertDialog.Builder areYouSure = new AlertDialog.Builder(this);
+                areYouSure.setTitle(R.string.are_you_sure);
+                areYouSure.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        itemsToBuy.clear();
+                        itemsAdapter.notifyDataSetChanged();
+                        Toast.makeText(MainActivity.this, R.string.cleared, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                areYouSure.setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // toast here? or is that too much feedback?
+                    }
+                });
+                AlertDialog aD = areYouSure.create();
+                aD.show();
+                return true;
+            default:
+                return true;
+        }
+    }
+
+
 
     public void handleListClick(View view, int position) {
         // When an item on a list is clicked, its position is passed here and an AlertDialog is used to ask whether it's being edited, deleted, etc.
