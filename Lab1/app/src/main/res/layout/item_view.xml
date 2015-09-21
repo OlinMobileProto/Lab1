@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:text="Got it!"
         android:id="@+id/doneButton"
+        android:onClick="onDoneButtonClick"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
