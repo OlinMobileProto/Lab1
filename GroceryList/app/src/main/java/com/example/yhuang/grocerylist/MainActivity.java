@@ -55,9 +55,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         items.remove(position);
-                        items.add(position,myText.getText().toString());
+                        items.add(position, myText.getText().toString());
                         itemsAdapter.notifyDataSetChanged();
                         myText.setText("");
+                        myButton.setOnClickListener(buttonClicker);
                     }
                 });
             }
