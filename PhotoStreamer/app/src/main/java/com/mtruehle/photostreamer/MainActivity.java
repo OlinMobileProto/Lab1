@@ -8,12 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+    private SearchFragment sf;
+    private FeedFragment ff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SearchFragment sf = new SearchFragment();
+        sf = new SearchFragment();
+        ff = new FeedFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction t = fm.beginTransaction();
         t.replace(R.id.container, sf);

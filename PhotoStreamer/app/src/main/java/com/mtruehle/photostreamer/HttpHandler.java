@@ -15,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class HttpHandler {
     public RequestQueue queue;
     private static final String BASE_URL = "https://www.googleapis.com/customsearch/v1";
@@ -38,14 +40,14 @@ public class HttpHandler {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        String[] imageLinkList = handleJson(response);
+                        ArrayList<String> imageLinkList = handleJson(response);
                         staticCallback.callback(imageLinkList, true);
                     }
                 },
                 new Response.ErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String[] emptyList = new String[2]; // callback needs it; doesn't get used.
+                        ArrayList<String> emptyList = new ArrayList<String>(); // callback needs it; doesn't get used.
                         staticCallback.callback(emptyList, false);
                     }
                 }
@@ -53,8 +55,8 @@ public class HttpHandler {
         queue.add(getRequest);
     }
 
-    public String[] handleJson(JSONObject input) {
-        String[] imageUrls = new String[10];
+    public ArrayList<String> handleJson(JSONObject input) {
+        ArrayList<String> imageUrls = new ArrayList<String>();
 
         try {
             JSONArray jArray = input.getJSONArray("items");
@@ -66,20 +68,20 @@ public class HttpHandler {
                 JSONObject currentJsonObject = jArray.getJSONObject(i);
                 try {
                     String currentUrl = currentJsonObject.getString("link");
-                    imageUrls[i] = currentUrl;
+                    imageUrls.add(currentUrl);
                 } catch (JSONException ex) {
-                    String currentUrl = "PASS"; // flags the callback to skip this item.
-                    imageUrls[i] = currentUrl;
+//                    String currentUrl = "PASS"; // flags the callback to skip this item.
+//                    imageUrls.add(currentUrl);
                     Log.e("Error", ex.getMessage());
                 }
             }
         } catch (JSONException ex) {
             Log.e("Error", ex.getMessage());
-            imageUrls[0] = "ERROR"; // flags the callback to ignore all items.
-            imageUrls[1] = "ERROR";
-            imageUrls[2] = "ERROR"; // probably unnecessary extra declarations.
+            imageUrls.add("ERROR"); // flags the callback to ignore all items.
+            imageUrls.add("ERROR");
+            imageUrls.add("ERROR"); // probably unnecessary extra declarations.
         }
-        Log.i("PRINTER", imageUrls[0] + "\t" + imageUrls[1] + "\t" + imageUrls[2] + "...");
+        Log.i("PRINTER", "Results retrieved: " + imageUrls.get(0) + "\t" + imageUrls.get(1) + "\t" + imageUrls.get(2) + "...");
         return imageUrls;
     }
 

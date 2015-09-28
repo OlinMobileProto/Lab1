@@ -10,4 +10,5 @@
     <string name="back">Back</string>
     <string name="save">Save</string>
     <string name="next">Next</string>
+    <string name="unsave">Unsave</string>
 </resources>
