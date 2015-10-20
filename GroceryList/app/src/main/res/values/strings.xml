@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Grocery List</string>
+    <string name="edit_button">Edit</string>
+    <string name="delete_button">Delete</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="entry_hint">Your Text Here...</string>
+    <string name="enter_button">Enter</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="send_or_cancel">Really send?</string>
+    <string name="add_an_item">Add an item:</string>
+    <string name="add">add</string>
+    <string name="added">added</string>
+    <string name="cancelled">cancelled</string>
+    <string name="edit_or_delete">Edit or delete this item?</string>
+    <string name="deleted">deleted</string>
+    <string name="editing">Editing</string>
+    <string name="ok">OK</string>
+    <string name="edited">edited</string>
+    <string name="delete_all">Delete all entries</string>
+    <string name="are_you_sure">Are you sure you want to clear all entries?</string>
+    <string name="yes">Yes</string>
+    <string name="cleared">list cleared</string>
+</resources>
